@@ -6,19 +6,18 @@
         <ControlList
           @start=""
           :baseArray="baseArray"
+          @generate="generate"
         />
       </aside>
 <!--      中间控件展示栏~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-
-        <section style="height: 900px" class="k-form-main" >
-          <div style="height: 40px; width: 100%; border-bottom: 3px solid #edeff1; "></div>
-          <el-scrollbar style="height: 800px; width: 100%">
-            <ContentFormTemplate
-              :baseArray="baseArray"
-            />
-          </el-scrollbar>
-        </section>
-
+      <section style="height: 900px; overflow: hidden" class="k-form-main" >
+        <div style="height: 40px; width: 100%; border-bottom: 3px solid #edeff1; "></div>
+        <el-scrollbar style="height: 800px; width: 100%;" >
+          <ContentFormTemplate
+            :baseArray="baseArray"
+          />
+        </el-scrollbar>
+      </section>
 <!--      属性栏~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
       <aside style="height: 900px" class="test-right props-div">
         <div class="control-props">表单/控件属性</div>
@@ -45,6 +44,16 @@
         },
         data() {
             return {
+                noModel: [
+                    "button",
+                    "divider",
+                    "card",
+                    "grid",
+                    "table",
+                    "alert",
+                    "text",
+                    "html"
+                ],
                 data: {
                     list: [],
                     config: {
@@ -58,7 +67,7 @@
             }
         },
         updated() {
-            console.log(this.list)
+
         },
         computed:{
             baseArray(){
@@ -67,11 +76,26 @@
             }
         },
         methods: {
+            generate(list,i){
+              const item = list[i];
+              //生成key
+              const key = item.type +"_"+new Date().getTime();
+              //把总线的list里的key赋值,并且让数据联动字段等于key
+              this.$set(list,i,{
+                  ...item,
+                  key,
+                  model:key
+              });
+              //删除不需要model属性的控件
+              if(!this.noModel.includes(item.type)){
+                delete item.model
+              }
+            },
             handleControlList(list){
             //    拿到左侧拖拽到操作框的控件类型
             },
             deepClone(e){
-                console.log(e)
+
             }
 
         }

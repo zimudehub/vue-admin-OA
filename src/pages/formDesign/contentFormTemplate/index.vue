@@ -1,27 +1,41 @@
 <template>
-  <draggable
-    tag="div"
-    class= "wrapper"
-    :value= "list"
-    v-bind= "{
-      group: { name: 'form-draggable', pull: 'clone', put: true },
-      animation: 180,
-      ghostClass: 'moving'
-    }"
-    @add="deepClone"
+  <el-form
+    label-position="left"
+    label-width="15%"
+    style="height: 900px; overflow: hidden"
+
   >
-    <transition-group tag="div" name="list" class="list-main">
-      <div v-for="(item, i) in list" :key="i*77">
-        {{item}}
-      </div>
-    </transition-group>
-  </draggable>
+    <draggable
+      tag="div"
+      class= "wrapper"
+      v-model= "list"
+      v-bind= "{
+        group: { name: 'form-draggable', pull: 'clone', put: true },
+        animation: 180,
+        ghostClass: 'moving',
+        sort: true,
+      }"
+      @add="deepClone"
+    >
+      <transition-group tag="div" name="list" class="list-main">
+        <div v-for="(item,i) in list" :key="item.key" @click="handleSelect(i)">
+          <transition-group tag="div" name="line" >
+            <div :class="selectIndex === i?'top-line top-line-bg':'top-line'"  :key="1 + item.key"/>
+          </transition-group>
+          <el-form-item  :label="item.label"  :class="selectIndex === i?'form-wrap form-wrap-select':'form-wrap'">
+            <el-input></el-input>
+            <p id="control-key">{{item.key}}</p>
+          </el-form-item>
+        </div>
+      </transition-group>
+    </draggable>
+  </el-form>
 </template>
 
 <script>
     import draggable from 'vuedraggable';
     export default {
-        name: "index",
+        name: "contentFormTemplate",
         props:{
             baseArray:{
                 type: Array,
@@ -30,24 +44,46 @@
         },
         components:{draggable},
         created(){
-            console.log(this.list)
+
+        },
+        computed:{
+            // list(){
+            //     return window.T_form_contentFormTemplate
+            // }
         },
         data(){
             return{
-              list:[]
+                list:[],
+                selectIndex:""
             }
         },
         methods: {
+            handleSelect(i){
+                this.selectIndex = i
+            },
             deepClone(e){
-            //用e.oldIndex为索引拿到baseArray中的对应的项
-               const index = e.oldIndex;
-               console.log(index)
+                this.selectIndex = e.newIndex;
+            },
+            Update(e){
+                console.log(e)
             }
         }
     }
 </script>
 
 <style>
+  #control-key{
+    position: absolute;
+    padding: 0;
+    margin: 0;
+    width: 120px;
+    height: 14px;
+    font-size: 12px;
+    color: black;
+    line-height: 14px;
+    top: 42px;
+    right: -25px;
+  }
   .list-main{
     width: 100%;
     height: 800px;
@@ -55,14 +91,5 @@
   .wrapper{
     width: 100%;
   }
-  .wrapper>.list-main>.moving{
-    width: 100%;
-    background-color: black;
-    min-height      : 35px;
-    box-sizing      : border-box;
-    overflow        : hidden;
-    padding         : 0 !important;
-  /*// margin       : 3px 0;*/
-    position        : relative;
-  }
+
 </style>

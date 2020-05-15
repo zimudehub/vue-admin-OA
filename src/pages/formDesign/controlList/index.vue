@@ -3,24 +3,25 @@
       <div class="control-button">控件选择</div>
 <!--      <div class="button-wrap">-->
         <draggable
-          tag="div"
+          tag="ul"
           :value="baseArray"
           class="button-wrap"
           v-bind="{
             group: { name: 'form-draggable', pull: 'clone', put: false },
             sort: false,
             animation: 180,
-            ghostClass: 'moving'
+            ghostClass: 'leftMoving'
           }"
           @start="handleStart($event, baseArray)"
         >
-          <el-button
+          <li
             v-for="(val, index) in baseArray"
             :key="index"
+            @dragstart="$emit('generate',baseArray,index)"
           >
-            <i :class="val.icon"></i>
-            {{ val.label }}
-          </el-button>
+              <i :class="val.icon"></i>
+              {{ val.label }}
+          </li>
         </draggable>
     </div>
 </template>
@@ -41,7 +42,6 @@
             }
         },
         methods:{
-
             handleStart(e, baseArray){
 
             }
@@ -70,10 +70,55 @@
     flex-wrap: wrap;
     justify-content: space-around;
   }
-  .button-wrap>button{
+  ul{
+    padding: 0;
+  }
+  .leftMoving{
+    list-style: none;
     text-align: left;
-    padding-left: 6px;
     width: 40%;
-    margin: 10px 0 0 0
+    display: inline-block;
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    background: #fff;
+    border: 1px solid #dcdfe6;
+    color: #606266;
+    -webkit-appearance: none;
+    box-sizing: border-box;
+    outline: none;
+    margin: 0 0 6px 0;
+    transition: .1s;
+    font-weight: 500;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    padding: 12px 20px 12px 6px;
+    font-size: 14px;
+    border-radius: 4px;
+  }
+  .button-wrap>li{
+    list-style: none;
+    text-align: left;
+    width: 40%;
+    display: inline-block;
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    background: #fff;
+    border: 1px solid #dcdfe6;
+    color: #606266;
+    -webkit-appearance: none;
+    box-sizing: border-box;
+    outline: none;
+    margin: 0 0 6px 0;
+    transition: .1s;
+    font-weight: 500;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    padding: 12px 20px 12px 6px;
+    font-size: 14px;
+    border-radius: 4px;
   }
 </style>

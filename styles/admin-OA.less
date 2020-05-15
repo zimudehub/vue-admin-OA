@@ -1,0 +1,72 @@
+.el-scrollbar__wrap{
+  overflow-x: hidden;
+}
+.el-form-item__label{
+  white-space: nowrap;
+}
+.list-enter-active {
+  transition: all .5s;
+}
+
+.list-leave-active {
+  transition: all .3s;
+}
+
+.list-enter,
+.list-leave-to /* .list-leave-active for below version 2.1.8 */ {
+  opacity  : 0;
+  transform: translateX(-100px);
+}
+
+.list-enter {
+  height: 30px;
+}
+.list-main {
+  min-height   : 100%;
+  padding      : 5px;
+  position     : relative;
+  // border    : 1px #ccc dashed;
+  .top-line{
+    position: relative;
+    margin: auto;
+    width: 20%;
+    height: 5px;
+  }
+  .top-line-bg{
+    background: #409eff;
+    width: 97%;
+    transition: width 0.5s,  transform 0.5s;
+  }
+  .form-wrap{
+    position: relative;
+    padding: 20px 60px 20px 40px;
+    margin: 0;
+  }
+  .form-wrap-select{
+    background: rgba(183,221,255,0.5);
+  }
+  .form-wrap:hover{
+    background: rgba(183,221,255,0.5);
+  }
+  .moving {
+    // 拖放移动中
+    // outline-width: 0;
+    list-style: none;
+    padding: 20px 60px 20px 40px;
+    margin: 0;
+    min-height      : 35px;
+    box-sizing      : border-box;
+    overflow        : hidden;
+    position        : relative;
+
+    &::before {
+      content   : '';
+      height    : 5px;
+      width     : 100%;
+      background: #409eff;
+      position  : absolute;
+      top       : 0;
+      right     : 0;
+    }
+  }
+}

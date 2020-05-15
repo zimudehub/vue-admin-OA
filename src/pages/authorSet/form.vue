@@ -29,9 +29,9 @@
         </el-form-item>
         <el-form-item label="部门" :label-width="formLabelWidth">
           <el-select v-model="form.branch" placeholder="请选择部门">
-            <el-option label="技术部" value="shanghai"></el-option>
-            <el-option label="信息部" value="beijing"></el-option>
-            <el-option label="人力资源" value="beijing"></el-option>
+            <el-option label="技术部" value="技术部"></el-option>
+            <el-option label="信息部" value="信息部"></el-option>
+            <el-option label="人力资源" value="人力资源"></el-option>
           </el-select>
         </el-form-item>
         <el-form-item label="权限选择" :label-width="formLabelWidth">
@@ -70,7 +70,8 @@
         watch: {
             param: {
                 handler(newValue, oldValue) {
-                    this.form = newValue
+                    this.form = JSON.parse(JSON.stringify(newValue))
+                    console.log(this.form)
                 },
                 // deep:true
             }
