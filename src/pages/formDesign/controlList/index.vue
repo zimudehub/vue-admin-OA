@@ -17,12 +17,14 @@
           <li
             v-for="(val, index) in baseArray"
             :key="index"
-            @dragstart="$emit('generate',baseArray,index)"
+            @dragstart="$emit('generate', baseArray, index)"
+            @click="$emit('clickPushItem', baseArray, index)"
           >
               <i :class="val.icon"></i>
               {{ val.label }}
           </li>
         </draggable>
+      <el-divider content-position="left">基础控件</el-divider>
     </div>
 </template>
 

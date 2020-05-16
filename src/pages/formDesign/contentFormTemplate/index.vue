@@ -2,13 +2,12 @@
   <el-form
     label-position="left"
     label-width="15%"
-    style="height: 900px; overflow: hidden"
-
+    style=" overflow: hidden"
   >
     <draggable
       tag="div"
       class= "wrapper"
-      v-model= "list"
+      v-model= "data.list"
       v-bind= "{
         group: { name: 'form-draggable', pull: 'clone', put: true },
         animation: 180,
@@ -16,17 +15,17 @@
         sort: true,
       }"
       @add="deepClone"
+      @update = "onUpdate"
     >
       <transition-group tag="div" name="list" class="list-main">
-        <div v-for="(item,i) in list" :key="item.key" @click="handleSelect(i)">
-          <transition-group tag="div" name="line" >
-            <div :class="selectIndex === i?'top-line top-line-bg':'top-line'"  :key="1 + item.key"/>
-          </transition-group>
-          <el-form-item  :label="item.label"  :class="selectIndex === i?'form-wrap form-wrap-select':'form-wrap'">
-            <el-input></el-input>
-            <p id="control-key">{{item.key}}</p>
-          </el-form-item>
-        </div>
+        <TFormTemplate
+          v-for="(item,i) in data.list"
+          :item="item"
+          :i = "i"
+          :select-index="selectIndex"
+          @emitClick="handleSelect(i)"
+          :key="item.key"
+        />
       </transition-group>
     </draggable>
   </el-form>
@@ -34,56 +33,50 @@
 
 <script>
     import draggable from 'vuedraggable';
+    import TFormTemplate from '../tFormTemplate'
     export default {
         name: "contentFormTemplate",
         props:{
-            baseArray:{
-                type: Array,
+            data:{
+                type: Object,
+                required: true
+            },
+            selectIndex:{
                 required: true
             }
         },
-        components:{draggable},
+        components:{draggable, TFormTemplate},
         created(){
 
         },
         computed:{
-            // list(){
-            //     return window.T_form_contentFormTemplate
-            // }
+
         },
         data(){
             return{
-                list:[],
-                selectIndex:""
+
             }
         },
+        watch:{
+
+        },
         methods: {
+            onUpdate(e){
+                //当排序结束时找到被激活的项
+                this.$emit("selectIndexChange", e.newIndex)
+            },
             handleSelect(i){
-                this.selectIndex = i
+                this.$emit("selectIndexChange", i)
             },
             deepClone(e){
-                this.selectIndex = e.newIndex;
+                this.$emit("selectIndexChange", e.newIndex)
             },
-            Update(e){
-                console.log(e)
-            }
+
         }
     }
 </script>
 
 <style>
-  #control-key{
-    position: absolute;
-    padding: 0;
-    margin: 0;
-    width: 120px;
-    height: 14px;
-    font-size: 12px;
-    color: black;
-    line-height: 14px;
-    top: 42px;
-    right: -25px;
-  }
   .list-main{
     width: 100%;
     height: 800px;

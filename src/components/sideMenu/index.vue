@@ -43,7 +43,7 @@
     }
 </script>
 
-<style>
+<style scoped>
   .el-menu-item-wrap{
     margin: 15px 0 15px 0;
   }

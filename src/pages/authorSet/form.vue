@@ -56,31 +56,14 @@
     export default {
         name: "authorForm",
         props:['showDrawer','param'],
-        // props: {
-        //     showDrawer: {
-        //         type: Boolean,
-        //     },
-        //     param:{
-        //         type: Object,
-        //         default:()=>{
-        //
-        //         }
-        //     }
-        // },
         watch: {
             param: {
-                handler(newValue, oldValue) {
+                handler(newValue) {
+                    //切断父子组件param的指针
                     this.form = JSON.parse(JSON.stringify(newValue))
-                    console.log(this.form)
                 },
-                // deep:true
             }
         },
-        // beforeUpdate(){
-        //     // console.log(this.param)
-        //     // this.form.phoneNumber = this.param.phone;
-        //     // console.log(this.form)
-        // },
         data(){
             return{
                 formLabelWidth: '80px',
