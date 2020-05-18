@@ -1,7 +1,7 @@
 <template>
   <el-form
     label-position="left"
-    label-width="15%"
+    label-width="20%"
     style=" overflow: hidden"
   >
     <draggable
@@ -24,6 +24,7 @@
           :i = "i"
           :select-index="selectIndex"
           @emitClick="handleSelect(i)"
+          @deleteItem="deleteItem"
           :key="item.key"
         />
       </transition-group>
@@ -71,6 +72,9 @@
             deepClone(e){
                 this.$emit("selectIndexChange", e.newIndex)
             },
+            deleteItem(){
+                this.$emit('deleteItem')
+            }
 
         }
     }

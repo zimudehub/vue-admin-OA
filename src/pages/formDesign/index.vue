@@ -17,7 +17,7 @@
             <el-button icon="el-icon-document-checked" circle size="mini"></el-button>
           </el-tooltip>
           <el-tooltip class="item" effect="dark" content="预览" placement="top-start">
-            <el-button icon="el-icon-view" circle size="mini"></el-button>
+            <el-button icon="el-icon-view" circle size="mini" @click="view"></el-button>
           </el-tooltip>
           <el-tooltip class="item" effect="dark" content="导入" placement="top-start">
             <el-button icon="el-icon-upload2" circle size="mini"></el-button>
@@ -32,26 +32,31 @@
             <el-button icon="el-icon-delete" circle size="mini" @click="deleteAll"></el-button>
           </el-tooltip>
         </div>
-        <el-scrollbar style="height: 880px; width: 100%;" >
+        <el-scrollbar style="height: 730px; width: 100%;" >
           <ContentFormTemplate
             :data="data"
             @selectIndexChange="selectIndexChange"
             :selectIndex="selectIndex"
+            @deleteItem="deleteItem"
           />
         </el-scrollbar>
         <div>
-          <TFormControlConfig
-            v-if="isNumber"
-            :config="data.list.length===0?{}:data.list[selectIndex].options"
-          />
+          <transition name="form">
+            <TFormControlConfig
+              v-if="isNumber&&isShrink"
+              :shrink="isShrink"
+              :config="data.list.length===0?{}:data.list[selectIndex]"
+              @shrink="shrink"
+            />
+          </transition>
         </div>
       </section>
 <!--      属性栏~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-      <aside style="height: 900px" class="left-form-layout">
+      <aside  class="right-form-layout">
         <div class="control-props">表单/控件属性</div>
-        <LayoutForm
-          :layoutData="data.config"
-        />
+          <LayoutForm
+            :layoutData="data.config"
+          />
       </aside>
     </div>
   </el-card>
@@ -71,7 +76,8 @@
                 type: Array,
                 default: () => [
                     "input",
-                    "text"
+                    "text",
+                    "number"
                 ]
             }
         },
@@ -87,6 +93,7 @@
                     "text",
                     "html"
                 ],
+                isShrink:true,
                 selectIndex:"",//被激活的项,全组件最关键的值,组件中大部分控件的显示与联动都是基于这个值的变化
                 data: {
                     list: [],
@@ -100,8 +107,17 @@
                 },
             }
         },
+        watch:{
+            selectIndex:{
+                //监听selectIndex变化时将isShrink置为true
+                handler(){
+                    this.isShrink = true
+                }
+            }
+        },
         computed:{
             isNumber(){
+                //判断当前是否有选中selectIndex
                 return typeof(this.selectIndex) === 'number'
             },
             baseArray(){
@@ -111,7 +127,7 @@
         },
         methods: {
             clickPushItem(list,i){
-                const item = list[i];
+                let item = list[i]
                 const key = item.type +"_"+new Date().getTime();
                 this.$set(list,i,{
                     ...item,
@@ -121,6 +137,8 @@
                 if(!this.noModel.includes(item.type)){
                     delete item.model
                 }
+                //切断item的指针指向,保证操作操作区data.list里的每一项都是唯一
+                item=JSON.parse(JSON.stringify(list[i]));
                 //判断selectIndex是否有值,有值将点击项加入选中项前否则放到最后
                 if (this.selectIndex){
                     this.data.list.splice(this.selectIndex+1,0,{
@@ -139,7 +157,11 @@
                 }
             },
             selectIndexChange(value){
-                this.selectIndex = value
+                //把曾加的项做一个深克隆,否则每个新增项的都指向了同一个对象
+                const cloneItem = JSON.parse(JSON.stringify(this.data.list[value]));
+                this.$set(this.data.list,value,cloneItem);
+                this.selectIndex = value;
+                this.isShrink = true
             },
             generate(list,i){
                 const item = list[i];
@@ -159,9 +181,25 @@
             handleControlList(list){
             //    拿到左侧拖拽到操作框的控件类型
             },
+            shrink(){
+                this.isShrink = false
+            },
             deleteAll(){
                 this.data.list=[];
                 this.selectIndex=""
+            },
+            deleteItem(){
+                this.data.list.splice(this.selectIndex,1);
+                if(this.selectIndex === 0&&this.data.list.length!==0){
+                    this.selectIndex = 0
+                }else if (this.selectIndex ===0&&this.data.list.length===0){
+                    this.selectIndex = ""
+                }else if(this.selectIndex===this.data.list.length){
+                    this.selectIndex= this.selectIndex-1
+                }
+            },
+            view(){
+                console.log(this.data.list)
             },
             deepClone(e){
 
@@ -172,6 +210,15 @@
 </script>
 
 <style scoped>
+  .form-enter-active, .form-leave-active {
+    transition: all .5s;
+  }
+  .form-enter /* .fade-leave-active below version 2.1.8 */ {
+    transform: translateX(100%);
+  }
+  .form-leave-to{
+    transform: translateX(100%);
+  }
   #T-form-wrap{
     max-width: 100%;
     display: flex;
@@ -179,5 +226,6 @@
   }
   .button-wrap{
     width: 300px;
+    border: 0;
   }
 </style>

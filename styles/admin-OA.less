@@ -1,8 +1,13 @@
-//.el-scrollbar__wrap{
-//  overflow-x: hidden;
-//}
+.el-scrollbar__wrap{
+  overflow-x: hidden;
+}
+.el-divider{
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
 .el-form-item__label{
   white-space: nowrap;
+  text-align: right;
 }
 .list-enter-active {
   transition: all .5s;
@@ -26,20 +31,35 @@
 
   .T-form-main{
     //中间栏
-    height: 900px;
+    //height: 900px;
     overflow: hidden;
     flex: 1 0 auto;
+    border-right: 5px solid #edeff1;
+    border-left: 5px solid #edeff1;
 
     .control-config-form{
-      width: 300px;
-      height: 900px;
+      width: 320px;
+      height: 730px;
       background: #fff;
       position: absolute;
       top: 53px;
-      right: 20px;
-      z-index: 999999999999;
+      right: 0;
+      z-index: 9;
       padding-top: 20px;
 
+      .el-form-item{
+        margin-left: 10px;
+        margin-bottom: 0;
+      }
+
+      .shrink-button{
+        padding: 8px 12px;
+        position: absolute;
+        margin:0;
+        left: -40px;
+        top: -1px;
+        opacity: 0.6;
+      }
     }
     .content-top-button{
       height: 40px;
@@ -55,7 +75,6 @@
 
     .list-main {
       min-height   : 100%;
-      padding      : 5px;
       position     : relative;
       // border    : 1px #ccc dashed;
       .top-line{
@@ -63,15 +82,25 @@
         margin: auto;
         width: 20%;
         height: 5px;
+
+        button{
+          position: absolute;
+          top: 5px;
+          right: 0;
+          z-index: 99999999999999999;
+          border-top-left-radius:0;
+          border-top-right-radius:0;
+          padding: 6px;
+        }
       }
       .top-line-bg{
         background: #409eff;
-        width: 97%;
+        width: 100%;
         transition: width 0.5s,  transform 0.5s;
       }
       .form-wrap{
         position: relative;
-        padding: 20px 60px 20px 40px;
+        padding: 20px 60px 20px 20px;
         margin: 0;
       }
       .form-wrap-select{
@@ -103,9 +132,8 @@
       }
     }
   }
-  .left-form-layout{
+  .right-form-layout{
     //左侧主布局表单
-    border-left: 5px solid #edeff1;
     width: 300px;
 
     .control-props{

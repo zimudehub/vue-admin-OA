@@ -1,5 +1,5 @@
 <template>
-    <div style="height: 900px" class="test">
+    <div class="test">
       <div class="control-button">控件选择</div>
 <!--      <div class="button-wrap">-->
         <draggable
@@ -54,7 +54,6 @@
 <style scoped>
   .test{
     width: 100%;
-    border-right: 5px solid #edeff1;
   }
   .control-button{
     width: 100%;
