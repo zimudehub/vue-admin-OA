@@ -1,0 +1,53 @@
+<template>
+    <div class="test">
+      <div class="control-button-title">控件选择</div>
+<!--      <div class="button-wrap">-->
+      <draggable
+          tag="ul"
+          :value="baseArray"
+          class="button-wrap-drg"
+          v-bind="{
+            group: { name: 'form-draggable', pull: 'clone', put: false },
+            sort: false,
+            animation: 180,
+            ghostClass: 'leftMoving'
+          }"
+          @start="handleStart($event, baseArray)"
+        >
+          <li
+            v-for="(val, index) in baseArray"
+            :key="index"
+            @dragstart="$emit('generate', baseArray, index)"
+            @click="$emit('clickPushItem', baseArray, index)"
+          >
+              <i :class="val.icon"></i>
+              {{ val.label }}
+          </li>
+        </draggable>
+      <el-divider content-position="left">基础控件</el-divider>
+    </div>
+</template>
+
+<script>
+    import draggable from "vuedraggable";
+    export default {
+        name: "controlList",
+        components:{
+            draggable
+        },
+        props:["baseArray"],
+        created(){
+        },
+        data(){
+            return{
+
+            }
+        },
+        methods:{
+            handleStart(e, baseArray){
+
+            }
+        }
+    }
+</script>
+

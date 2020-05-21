@@ -47,7 +47,23 @@
         :min="item.options.min"
         :max="item.options.max"
         :precision="item.options.precision"
+        :disabled="item.options.disabled"
       />
+      <el-select
+        v-if="item.type === 'select'"
+        v-model="item.options.defaultValue"
+        :placeholder="item.options.placeholder"
+        :style="'width:'+item.options.width+'%'"
+        :disabled="item.options.disabled"
+        :clearable="item.options.clearable"
+      >
+        <el-option
+          v-for="items in item.options.options"
+          :key="items.value"
+          :label="items.label"
+          :value="items.value">
+        </el-option>
+      </el-select>
       <p id="control-key">{{item.key}}</p>
     </el-form-item>
   </div>

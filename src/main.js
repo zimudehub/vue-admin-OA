@@ -7,6 +7,8 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import store from './vuex-store';
 import "../styles/admin-OA.less"
+import "../styles/tcd-form-design.less"
+
 Vue.use(ElementUI);
 Vue.config.productionTip = false;
 new Vue({

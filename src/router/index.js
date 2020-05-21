@@ -9,6 +9,7 @@ const FlowForm = ()=>import("../pages/baseForm/flowForm");
 const SuperForm = ()=>import("../pages/baseForm/superForm");
 const Author = () =>import("../pages/authorSet");
 const FormDesign = () =>import("../pages/formDesign");
+const FormDesign1 = () =>import("../pages/formDesign1");
 const router = new Router({
   mode:"history",
   routes: [
@@ -47,6 +48,11 @@ const router = new Router({
           path: "author",
           name: "author",
           component: Author,
+        },
+        {
+          path: "formDesign1",
+          name: "formDesign1",
+          component: FormDesign1
         },
         {
           path: "formDesign",

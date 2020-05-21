@@ -29,13 +29,13 @@ export default{
       icon: "el-icon-s-goods"
     },
     {
-      name: "表单设计",
-      path: "formDesign",
+      name: "表单设计1",
+      path: "formDesign1",
       icon: "el-icon-s-data"
     },
     {
-      name: "卡片",
-      path: "22",
+      name: "表单设计(老)",
+      path: "formDesign",
       icon: "el-icon-s-grid"
     },
     {

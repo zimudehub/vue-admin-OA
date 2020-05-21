@@ -32,25 +32,25 @@
             <el-button icon="el-icon-delete" circle size="mini" @click="deleteAll"></el-button>
           </el-tooltip>
         </div>
-        <el-scrollbar style="height: 730px; width: 100%;" >
+        <div class="control-center-wrap">
           <ContentFormTemplate
             :data="data"
-            @selectIndexChange="selectIndexChange"
-            :selectIndex="selectIndex"
+            @selectItemChange="selectItemChange"
+            :selectItem="selectItem"
             @deleteItem="deleteItem"
+            @choose="choose"
+            @startChoose="startChoose"
           />
-        </el-scrollbar>
-        <div>
-          <transition name="form">
-            <TFormControlConfig
-              v-if="isNumber&&isShrink"
-              :shrink="isShrink"
-              :config="data.list.length===0?{}:data.list[selectIndex]"
-              @shrink="shrink"
-              @addModel="addModel"
-            />
-          </transition>
         </div>
+        <transition name="form">
+          <div  v-if="isShrink" class="right-template-form">
+              <TFormControlConfig
+                :config="selectItem"
+                @shrink="shrink"
+                @addModel="addModel"
+              />
+          </div>
+        </transition>
       </section>
 <!--      属性栏~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
       <aside  class="right-form-layout">
@@ -79,7 +79,10 @@
                     "input",
                     "text",
                     "number",
-                    "select"
+                    "select",
+                    "checkbox",
+                    "radio",
+                    "date"
                 ]
             }
         },
@@ -95,8 +98,11 @@
                     "text",
                     "html"
                 ],
-                isShrink:true,
+                isShrink:false,
                 selectIndex:"",//被激活的项,全组件最关键的值,组件中大部分控件的显示与联动都是基于这个值的变化
+                selectItem:{
+                    key:""
+                },//当前激活项
                 data: {
                     list: [],
                     config: {
@@ -110,7 +116,7 @@
             }
         },
         watch:{
-            selectIndex:{
+            selectItem:{
                 //监听selectIndex变化时将isShrink置为true
                 handler(){
                     this.isShrink = true
@@ -128,6 +134,14 @@
             }
         },
         methods: {
+            startChoose(i){
+                this.selectItem = this.data.list[i]
+            },
+            choose(item){
+                //拿到子组件传过来的激活项
+                this.selectItem = item;
+                this.isShrink = true
+            },
             clickPushItem(list,i){
                 let item = list[i];
                 const key = item.type +"_"+new Date().getTime();
@@ -136,34 +150,50 @@
                     key,
                     model:key
                 });
-                if(!this.noModel.includes(item.type)){
+                if(this.noModel.includes(item.type)){
                     delete item.model
                 }
-                //切断item的指针指向,保证操作操作区data.list里的每一项都是唯一
-                item=JSON.parse(JSON.stringify(list[i]));
-                //判断selectIndex是否有值,有值将点击项加入选中项前否则放到最后
-                if (this.selectIndex){
-                    this.data.list.splice(this.selectIndex+1,0,{
-                        ...item,
-                        key,
-                        model:key
+                delete item.icon;
+                //给item做一个深克隆
+                item = JSON.parse(JSON.stringify(list[i]));
+
+                const putItem = array =>{
+                    if (array.length ===0){
+                        array.push(item);
+                        this.selectItem = item;
+                        return
+                    }
+                    array.forEach((child,i)=>{
+                        if(child.key===this.selectItem.key){
+                           array.splice(i+1,0,item)
+                        }else if(this.selectItem.key===''){
+                            array.push(item)
+                        }
                     });
-                    this.selectIndex = this.selectIndex+1
-                }else{
-                    this.data.list.push({
-                        ...item,
-                        key,
-                        model:key
-                    });
-                    this.selectIndex = this.data.list.length-1
-                }
+                };
+                putItem(this.data.list);
+                this.selectItem = item
             },
-            selectIndexChange(value){
-                //把曾加的项做一个深克隆,否则每个新增项的都指向了同一个对象
-                const cloneItem = JSON.parse(JSON.stringify(this.data.list[value]));
-                this.$set(this.data.list,value,cloneItem);
-                this.selectIndex = value;
-                this.isShrink = true
+            deleteItem(){
+                this.data.list.forEach((item,i)=>{
+                    if (item.key === this.selectItem.key){
+                        this.data.list.splice(i,1);
+                        if (this.data.list.length===0){
+                            this.selectItem = {key: ''};
+
+                        }else if(this.data.list.length === i) {
+                            this.selectItem = this.data.list[i-1]
+                        }else {
+                            this.selectItem = this.data.list[i]
+                        }
+                    }
+                })
+            },
+            selectItemChange(item, i){
+                this.$set(this.data.list,i,{
+                    ...item
+                });
+                this.selectItem = item
             },
             generate(list,i){
                 const item = list[i];
@@ -176,8 +206,8 @@
                     model:key
                 });
                 //删除不需要model属性的控件
-                if(!this.noModel.includes(item.type)){
-                  delete item.model
+                if(this.noModel.includes(item.type)){
+                  delete list[i].model
                 }
             },
             handleControlList(list){
@@ -187,24 +217,14 @@
                 this.isShrink = false
             },
             addModel(){
-                this.data.list[this.selectIndex].options.options.push({
-                    value:"",
-
+                this.selectItem.options.options.push({
+                    value: "",
+                    label: ""
                 })
             },
             deleteAll(){
                 this.data.list=[];
                 this.selectIndex=""
-            },
-            deleteItem(){
-                this.data.list.splice(this.selectIndex,1);
-                if(this.selectIndex === 0&&this.data.list.length!==0){
-                    this.selectIndex = 0
-                }else if (this.selectIndex ===0&&this.data.list.length===0){
-                    this.selectIndex = ""
-                }else if(this.selectIndex===this.data.list.length){
-                    this.selectIndex= this.selectIndex-1
-                }
             },
             view(){
                 console.log(this.data.list)
@@ -216,24 +236,3 @@
         }
     }
 </script>
-
-<style scoped>
-  .form-enter-active, .form-leave-active {
-    transition: all .5s;
-  }
-  .form-enter /* .fade-leave-active below version 2.1.8 */ {
-    transform: translateX(100%);
-  }
-  .form-leave-to{
-    transform: translateX(100%);
-  }
-  #T-form-wrap{
-    max-width: 100%;
-    display: flex;
-    flex-direction: row;
-  }
-  .button-wrap{
-    width: 300px;
-    border: 0;
-  }
-</style>

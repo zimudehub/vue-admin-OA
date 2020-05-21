@@ -75,6 +75,7 @@ export const baseList=[
     label: "下拉选择框",//控件名字
     options: {
       width: 100, // 宽度
+      minWidth:20,
       defaultValue: undefined, // 下拉选框请使用undefined为默认值
       multiple: false, // 是否允许多选
       disabled: false, // 是否禁用
@@ -86,11 +87,11 @@ export const baseList=[
         // 下拉选择项配置
         {
           value: "1",
-          label: "选项1"
+          label: "选项1",
         },
         {
           value: "2",
-          label: "选项2"
+          label: "选项2",
         }
       ],
       showSearch: false // 是否显示搜索框，搜索选择的项的值，而不是文字
@@ -105,69 +106,95 @@ export const baseList=[
     ]
   },
   {
-    type: "grid",
-    label: "栅格布局",
-    icon: "icon-zhage",
-    columns: [
-      {
-        span: 12,
-        list: []
-      },
-      {
-        span: 12,
-        list: []
-      }
-    ],
-    options: {
-      gutter: 0
-    },
-    key: "",
-    model: ""
-  },
-  {
-    type: "input",//控件类型
+    type: "checkbox",//控件类型
     icon: "el-icon-tickets",//图标
     label: "多选框",//控件名字
     options: {
-      type: "text",
-      width: "100%", // 宽度
-      defaultValue: "", // 默认值
-      placeholder: "请输入", // 没有输入时，提示文字
-      clearable: false,
-      maxLength: null,
-      hidden: false, // 是否隐藏，false显示，true隐藏
-      disabled: false // 是否禁用，false不禁用，true禁用
+      disabled: false, //是否禁用
+      checkboxDefaultValue: [],
+      chooseMin:1,
+      chooseMax:3,
+      dynamicKey: "",
+      dynamic: false,
+      options: [
+        {
+          value: "1",
+          label: "选项1"
+        },
+        {
+          value: "2",
+          label: "选项2"
+        },
+        {
+          value: "3",
+          label: "选项3"
+        }
+      ]
     },
+    model: "",
+    key: "",
+    rules: [
+      {
+        required: false,
+        message: "必填项"
+      }
+    ]
   },
   {
-    type: "input",//控件类型
+    type: "radio",//控件类型
     icon: "el-icon-remove-outline",//图标
     label: "单选框",
     options: {
-      type: "text",
-      width: "100%", // 宽度
+      disabled: false, //是否禁用
       defaultValue: "", // 默认值
-      placeholder: "请输入", // 没有输入时，提示文字
-      clearable: false,
-      maxLength: null,
-      hidden: false, // 是否隐藏，false显示，true隐藏
-      disabled: false // 是否禁用，false不禁用，true禁用
+      dynamicKey: "",
+      dynamic: false,
+      options: [
+        {
+          value: "1",
+          label: "选项1"
+        },
+        {
+          value: "2",
+          label: "选项2"
+        },
+        {
+          value: "3",
+          label: "选项3"
+        }
+      ]
     },
+    model: "",
+    key: "",
+    rules: [
+      {
+        required: false,
+        message: "必填项"
+      }
+    ]
   },
   {
-    type: "input",//控件类型
+    type: "date",//控件类型
     icon: "el-icon-stopwatch",//图标
-    label: "时间选择器",
+    label: "日期选择器",
     options: {
-      type: "text",
-      width: "100%", // 宽度
-      defaultValue: "", // 默认值
-      placeholder: "请输入", // 没有输入时，提示文字
-      clearable: false,
-      maxLength: null,
-      hidden: false, // 是否隐藏，false显示，true隐藏
-      disabled: false // 是否禁用，false不禁用，true禁用
+      width: 100, // 宽度
+      defaultValue: "", // 默认值，字符串 12:00:00
+      rangeDefaultValue: "", // 默认值，字符串 12:00:00
+      disabled: false, // 是否禁用
+      placeholder: "请选择",
+      format:"yyyy 年 MM 月 dd 日",//展示格式
+      isChooseTimes: 1,//是否是选择一个时间段
+      valueFormat:"yyyy-MM-dd"//解析格式
     },
+    model: "",
+    key: "",
+    rules: [
+      {
+        required: false,
+        message: "必填项"
+      }
+    ]
   },
   {
     type: "input",//控件类型
