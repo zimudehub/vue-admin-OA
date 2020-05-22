@@ -82,7 +82,10 @@
                     "select",
                     "checkbox",
                     "radio",
-                    "date"
+                    "date",
+                    "time",
+                    "uploadFile",
+                    "uploadImg",
                 ]
             }
         },
@@ -99,7 +102,6 @@
                     "html"
                 ],
                 isShrink:false,
-                selectIndex:"",//被激活的项,全组件最关键的值,组件中大部分控件的显示与联动都是基于这个值的变化
                 selectItem:{
                     key:""
                 },//当前激活项
@@ -116,9 +118,23 @@
             }
         },
         watch:{
+            data:{
+                //监听data.list如果没值将isShrink置为false,为操作栏中的清除按钮服务
+                handler(newValue){
+                    if (newValue.list.length===0){
+                        this.isShrink = false
+                    }
+                },
+                deep:true,
+                immediate:true
+            },
             selectItem:{
-                //监听selectIndex变化时将isShrink置为true
-                handler(){
+                //监听selectItem变化时将isShrink置为true,如果selectItem没有值置为false
+                handler(newValue){
+                    if (!newValue.hasOwnProperty('options')){
+                        this.isShrink = false;
+                        return
+                    }
                     this.isShrink = true
                 }
             }
@@ -144,16 +160,16 @@
             },
             clickPushItem(list,i){
                 let item = list[i];
+                delete item.icon;
+                if(this.noModel.includes(item.type)){
+                    delete item.model
+                }
                 const key = item.type +"_"+new Date().getTime();
                 this.$set(list,i,{
                     ...item,
                     key,
                     model:key
                 });
-                if(this.noModel.includes(item.type)){
-                    delete item.model
-                }
-                delete item.icon;
                 //给item做一个深克隆
                 item = JSON.parse(JSON.stringify(list[i]));
 

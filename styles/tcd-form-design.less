@@ -161,9 +161,12 @@ li{
             overflow-x:hidden ;
 
             .moving{
+              position: relative;
               //控件选择栏移动样式
               &.moving::before{
                 content: '';
+                position: absolute;
+                top: 0px;
                 width: 100%;
                 height: 5px;
                 background: #409eff;

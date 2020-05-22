@@ -39,6 +39,10 @@
             </el-slider>
           </div>
         </el-form-item>
+        <UploadFileOrImg
+          v-if="config.type==='uploadFile'||config.type==='uploadImg'"
+          :options="config.options"
+        />
         <el-divider v-if="config.options.hasOwnProperty('options')"/>
         <el-form-item label="下拉框数据" v-if="config.options.hasOwnProperty('options')" >
           <el-radio-group v-model="radio"  >
@@ -64,10 +68,11 @@
             :max="config.options.options.length-1"
           />
         </el-form-item>
-        <el-divider v-if="config.options.hasOwnProperty('defaultValue')"></el-divider>
-        <el-form-item v-if="config.options.hasOwnProperty('defaultValue')&&!config.options.hasOwnProperty('rangeDefaultValue')" :label="config.type==='number'?'默认值(必须为数字)':'默认值'">
+        <el-divider v-if="config.options.hasOwnProperty('defaultValue')&&!config.options.hasOwnProperty('isChooseTimes')"></el-divider>
+        <el-form-item v-if="config.options.hasOwnProperty('defaultValue')&&!config.options.hasOwnProperty('isChooseTimes')" :label="config.type==='number'?'默认值(必须为数字)':'默认值'">
           <el-input v-model="config.options.defaultValue"></el-input>
         </el-form-item>
+        <TimeOrDate v-if="config.options.hasOwnProperty('isChooseTimes')" v-model="config"/>
         <el-divider v-if="config.options.hasOwnProperty('min')"></el-divider>
         <el-form-item v-if="config.options.hasOwnProperty('min')" label="最小值">
           <el-input-number v-model="config.options.min" ></el-input-number>
@@ -84,8 +89,8 @@
         <el-form-item v-if="config.options.hasOwnProperty('step')" label="步数">
           <el-input-number v-model="config.options.step" ></el-input-number>
         </el-form-item>
-        <el-divider v-if="config.options.hasOwnProperty('placeholder')"></el-divider>
-        <el-form-item label="提示信息" v-if="config.options.hasOwnProperty('placeholder')">
+        <el-divider v-if="config.options.hasOwnProperty('placeholder')&&!config.options.hasOwnProperty('isChooseTimes')"></el-divider>
+        <el-form-item label="提示信息" v-if="config.options.hasOwnProperty('placeholder')&&!config.options.hasOwnProperty('isChooseTimes')">
           <el-input v-model="config.options.placeholder"></el-input>
         </el-form-item>
         <el-divider v-if="showCheckbox"></el-divider>
@@ -93,6 +98,7 @@
           <el-checkbox v-model="config.options.disabled" v-if="config.options.hasOwnProperty('disabled')">禁用</el-checkbox>
           <el-checkbox v-model="config.options.hidden" v-if="config.options.hasOwnProperty('hidden')">隐藏</el-checkbox>
           <el-checkbox v-model="config.options.clearable" v-if="config.options.hasOwnProperty('clearable')">可清除</el-checkbox>
+          <el-checkbox v-model="config.options.multiple" v-if="config.options.hasOwnProperty('multiple')">可多选文件</el-checkbox>
         </el-form-item>
         <el-divider></el-divider>
         <el-form-item label="校验规则">
@@ -102,10 +108,12 @@
 </template>
 
 <script>
-  import TOptionAdd from '../tOptionAdd'
+  import TOptionAdd from '../tOptionAdd';
+  import TimeOrDate from '../timeOrDateConfig'
+  import UploadFileOrImg from '../uploadFileOrImg'
     export default {
         name: "tFormControlConfig",
-        components:{TOptionAdd},
+        components:{TOptionAdd, TimeOrDate, UploadFileOrImg},
         props:{
             config:{
                 type: Object,

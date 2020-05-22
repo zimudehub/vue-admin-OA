@@ -49,13 +49,13 @@ export const baseList=[
   {
     type: "number",//控件类型
     icon: "el-icon-c-scale-to-original",//图标
-    label: "数字输入框",//控件名字
+    label: "计数器",//控件名字
     options: {
       minWidth:40,
       width: 40, // 宽度
       defaultValue: 0, // 默认值
-      min: -9999999, // 可输入最小值
-      max: 99999999,
+      min: -999999999, // 可输入最小值
+      max: 99999999999,
       step:1,
       precision:null,
       disabled: false // 是否禁用，false不禁用，true禁用
@@ -92,6 +92,10 @@ export const baseList=[
         {
           value: "2",
           label: "选项2",
+        },
+        {
+          value: "3",
+          label: "选项2",
         }
       ],
       showSearch: false // 是否显示搜索框，搜索选择的项的值，而不是文字
@@ -119,15 +123,18 @@ export const baseList=[
       options: [
         {
           value: "1",
-          label: "选项1"
+          label: "选项1",
+          key:11
         },
         {
           value: "2",
-          label: "选项2"
+          label: "选项2",
+          key:22
         },
         {
           value: "3",
-          label: "选项3"
+          label: "选项3",
+          key:33
         }
       ]
     },
@@ -152,15 +159,18 @@ export const baseList=[
       options: [
         {
           value: "1",
-          label: "选项1"
+          label: "选项1",
+          key:11
         },
         {
           value: "2",
-          label: "选项2"
+          label: "选项2",
+          key:22
         },
         {
           value: "3",
-          label: "选项3"
+          label: "选项3",
+          key:33
         }
       ]
     },
@@ -180,12 +190,15 @@ export const baseList=[
     options: {
       width: 100, // 宽度
       defaultValue: "", // 默认值，字符串 12:00:00
-      rangeDefaultValue: "", // 默认值，字符串 12:00:00
+      rangeDefaultValue: [ "", "" ], // 默认值，字符串 12:00:00
       disabled: false, // 是否禁用
-      placeholder: "请选择",
+      placeholder: "请选择日期点",
       format:"yyyy 年 MM 月 dd 日",//展示格式
-      isChooseTimes: 1,//是否是选择一个时间段
-      valueFormat:"yyyy-MM-dd"//解析格式
+      isChooseTimes: "2",//是否是选择一个时间段
+      valueFormat:"timestamp",//解析格式
+      rangeSeparator:"至",//时间段选择中间文字
+      startPlaceholder:"开始日期",//时间段选择前文字
+      endPlaceholder:"结束日期",//时间段选择后文字
     },
     model: "",
     key: "",
@@ -197,49 +210,76 @@ export const baseList=[
     ]
   },
   {
-    type: "input",//控件类型
+    type: "time",//控件类型
     icon: "el-icon-date",//图标
-    label: "日期选择器",
+    label: "时间选择器",
     options: {
-      type: "text",
-      width: "100%", // 宽度
-      defaultValue: "", // 默认值
-      placeholder: "请输入", // 没有输入时，提示文字
-      clearable: false,
-      maxLength: null,
-      hidden: false, // 是否隐藏，false显示，true隐藏
-      disabled: false // 是否禁用，false不禁用，true禁用
+      isChooseTimes: "2",//是否是选择一个时间段
+      width: 100, // 宽度
+      defaultValue: "", // 默认值，字符串 12:00:00
+      clearable: false, // 是否显示清除按钮
+      placeholder: "请选择时间点",
+      format: "HH:mm:ss", // 展示格式
+      rangeSeparator:"至",//时间段选择中间文字
+      startPlaceholder:"开始时间",//时间段选择前文字
+      endPlaceholder:"结束时间",//时间段选择后文字
     },
+    model: "",
+    key: "",
+    rules: [
+      {
+        required: false,
+        message: "必填项"
+      }
+    ]
   },
   {
-    type: "input",//控件类型
+    type: "uploadFile",//控件类型
     icon: "el-icon-upload2",//图标
     label: "上传文件",
     options: {
-      type: "text",
-      width: "100%", // 宽度
-      defaultValue: "", // 默认值
-      placeholder: "请输入", // 没有输入时，提示文字
-      clearable: false,
-      maxLength: null,
-      hidden: false, // 是否隐藏，false显示，true隐藏
-      disabled: false // 是否禁用，false不禁用，true禁用
+      uploadDefaultValue: [],
+      multiple: true,
+      disabled: false,
+      drag: false,
+      width: 100,
+      limit: 3,
+      buttonText:"点击上传",
+      warnText:"只能上传jpg/png文件，且不超过500kb",
+      action: "http://cdn.kcz66.com/uploadFile.txt",
     },
+    model: "",
+    key: "",
+    rules: [
+      {
+        required: false,
+        message: "必填项"
+      }
+    ]
   },
   {
-    type: "input",//控件类型
+    type: "uploadImg",//控件类型
     icon: "el-icon-picture-outline",//图标
     label: "上传图片",
     options: {
-      type: "text",
-      width: "100%", // 宽度
-      defaultValue: "", // 默认值
-      placeholder: "请输入", // 没有输入时，提示文字
-      clearable: false,
-      maxLength: null,
-      hidden: false, // 是否隐藏，false显示，true隐藏
-      disabled: false // 是否禁用，false不禁用，true禁用
+      uploadDefaultValue: "",
+      multiple: true,
+      disabled: false,
+      width: 100,
+      limit: 3,
+      action: "https://jsonplaceholder.typicode.com/posts/",
+      listType: "picture-card",
+      dialogVisible:false,
+      dialogImageUrl:""
     },
+    model: "",
+    key: "",
+    rules: [
+      {
+        required: false,
+        message: "必填项"
+      }
+    ]
   },
   {
     type: "input",//控件类型

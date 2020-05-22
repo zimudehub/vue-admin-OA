@@ -85,6 +85,10 @@
             deepClone(e){
                 //当从左侧拖进来时,将拖进来的数据,克隆一份传给selectItem,保证操作区域的data.list值唯一
                 const item = JSON.parse(JSON.stringify(this.data.list[e.newIndex]));
+                delete item.icon;
+                if(this.noModel.includes(item.type)){
+                    delete item.model
+                }
                 this.$emit("selectItemChange", item, e.newIndex)
             },
             deleteItem(){

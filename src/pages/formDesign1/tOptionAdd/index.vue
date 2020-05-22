@@ -33,11 +33,13 @@
               this.$emit("input", options)
             },
             addItem(){
+                const key = new Date().getTime()
                 const options = [
                     ...this.value,
                     {
                         value: '',
-                        label: ''
+                        label: '',
+                        key
                     }
                 ];
                 this.$emit("input", options)
