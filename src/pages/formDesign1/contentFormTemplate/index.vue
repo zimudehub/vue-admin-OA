@@ -1,7 +1,6 @@
 <template>
   <el-form
-    label-position="left"
-    label-width="15%"
+    :label-position="data.config.labelPosition"
   >
     <draggable
       tag="div"
@@ -20,6 +19,7 @@
       <transition-group tag="div" name="list" class="list-main">
           <TFormTemplate
             v-for="(item,i) in data.list"
+            :layout="data.config"
             :key="item.key"
             :item="item"
             :i = "i"
@@ -61,7 +61,7 @@
         },
         components:{draggable, TFormTemplate},
         created(){
-
+          console.log(this.$refs)
         },
         computed:{
 

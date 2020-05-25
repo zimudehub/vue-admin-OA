@@ -5,8 +5,10 @@
       :class="selectItem.key===item.key?'active':''"
       @click="$emit('onClick',item)"
     >
+
       <FormNode
         :item="item"
+        :layout="layout"
       />
       <el-button
         size="mini"
@@ -25,6 +27,10 @@
         name: "tFormTemplate",
         components:{FormNode},
         props:{
+            layout:{
+                type:Object,
+                required:true,
+            },
             item:{
                 type: Object,
                 default:()=>{},

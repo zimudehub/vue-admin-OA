@@ -1,8 +1,8 @@
 <template>
   <el-card class="box-card">
-    <div id="T-form-wrap">
+    <div id="T-form-wrap" ref="allWrap">
 <!--      控件按钮栏~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-      <aside class="button-wrap">
+      <aside class="button-wrap" >
         <ControlList
           @start=""
           :baseArray="baseArray"
@@ -11,7 +11,7 @@
         />
       </aside>
 <!--      中间控件展示栏~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
-      <section class="T-form-main" >
+      <section class="T-form-main" ref="contentWrap">
         <div class="content-top-button" >
           <el-tooltip class="item" effect="dark" content="保存" placement="top-start">
             <el-button icon="el-icon-document-checked" circle size="mini"></el-button>
@@ -55,9 +55,10 @@
 <!--      属性栏~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
       <aside  class="right-form-layout">
         <div class="control-props">表单/控件属性</div>
-          <LayoutForm
-            :layoutData="data.config"
-          />
+        <LayoutForm
+          v-if="!isShrink"
+          :layoutData="data.config"
+        />
       </aside>
     </div>
   </el-card>
@@ -72,6 +73,18 @@
     export default {
         name: "index",
         components: {ControlList, ContentFormTemplate, LayoutForm, TFormControlConfig},
+        mounted(){
+            //这里的代码为富文本编辑器服务,因为布局关系会导致富文本编辑器被拖入的时候造成页面被撑开,这里做监听
+            this.$refs.contentWrap.style.width = this.$refs.allWrap.scrollWidth-640+"px";
+            addEventListener('resize',()=>{
+                this.$refs.contentWrap.style.width = this.$refs.allWrap.scrollWidth-640+"px"
+            })
+        },
+        destroyed(){
+            removeEventListener('resize',()=>{
+                this.$refs.contentWrap.style.width = this.$refs.allWrap.scrollWidth-640+"px"
+            })
+        },
         props: {
             baseList: {
                 type: Array,
@@ -86,6 +99,13 @@
                     "time",
                     "uploadFile",
                     "uploadImg",
+                    "tMKeditor",
+                    "button",
+                    "switch",
+                    "slider",
+                    "p",
+                    "super",
+                    "tipsWindow"
                 ]
             }
         },
@@ -98,8 +118,9 @@
                     "grid",
                     "table",
                     "alert",
-                    "text",
-                    "html"
+                    "p",
+                    "html",
+                    "super"
                 ],
                 isShrink:false,
                 selectItem:{
@@ -108,11 +129,9 @@
                 data: {
                     list: [],
                     config: {
-                        layout: "horizontal",
-                        labelCol: { span: 4 },
-                        wrapperCol: { span: 18 },
-                        hideRequiredMark: false,
-                        customStyle: ""
+                        labelPosition: "left",
+                        labelWidth: 15,
+                        customWidth: ""
                     }
                 },
             }
@@ -206,9 +225,8 @@
                 })
             },
             selectItemChange(item, i){
-                this.$set(this.data.list,i,{
-                    ...item
-                });
+                this.$set(this.data.list,i, item
+                );
                 this.selectItem = item
             },
             generate(list,i){

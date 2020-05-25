@@ -4,6 +4,7 @@ export const baseList=[
     icon: "el-icon-edit",//图标
     label: "输入框",//控件名字
     options: {
+      label: "输入框",
       minWidth:10,
       width: 100, // 宽度
       defaultValue: "", // 默认值
@@ -53,7 +54,7 @@ export const baseList=[
     options: {
       minWidth:40,
       width: 40, // 宽度
-      defaultValue: 0, // 默认值
+      numberDefaultValue: 0, // 默认值
       min: -999999999, // 可输入最小值
       max: 99999999999,
       step:1,
@@ -282,78 +283,86 @@ export const baseList=[
     ]
   },
   {
-    type: "input",//控件类型
+    type: "button",//控件类型
     icon: "el-icon-thumb",//图标
     label: "按钮",
     options: {
-      type: "text",
-      width: "100%", // 宽度
-      defaultValue: "", // 默认值
-      placeholder: "请输入", // 没有输入时，提示文字
-      clearable: false,
-      maxLength: null,
-      hidden: false, // 是否隐藏，false显示，true隐藏
-      disabled: false // 是否禁用，false不禁用，true禁用
+      buttonType: "primary",
+      handle: "submit",
+      dynamicFun: "",
+      disabled:false
     },
+    key: ""
   },
   {
-    type: "input",//控件类型
+    type: "switch",//控件类型
     icon: "el-icon-open",//图标
     label: "开关",
     options: {
-      type: "text",
-      width: "100%", // 宽度
-      defaultValue: "", // 默认值
-      placeholder: "请输入", // 没有输入时，提示文字
-      clearable: false,
-      maxLength: null,
-      hidden: false, // 是否隐藏，false显示，true隐藏
-      disabled: false // 是否禁用，false不禁用，true禁用
+      switchValue: false, // 默认值 Boolean 类型
+      disabled: false, // 是否禁用
+      activeText:"开",
+      inactiveText:"关"
     },
+    model: "",
+    key: "",
+    rules: [
+      {
+        required: false,
+        message: "必填项"
+      }
+    ]
   },
   {
-    type: "input",//控件类型
+    type: "slider",//控件类型
+    icon: "el-icon-set-up",//图标
+    label: "滑动输入条",
+    options: {
+      width: 100, // 宽度
+      numberDefaultValue: 0, // 默认值， 如果range为true的时候，则需要改成数组,如：[12,15]
+      disabled: false, // 是否禁用
+      min: 0, // 最小值
+      max: 100, // 最大值
+      step: 1, // 步长，取值必须大于 0，并且可被 (max - min) 整除
+      showInput: true // 是否显示输入框，range为true时，请勿开启
+    },
+    model: "",
+    key: "",
+    rules: [
+      {
+        required: false,
+        message: "必填项"
+      }
+    ]
+  },
+  {
+    type: "tipsWindow",//控件类型
     icon: "el-icon-copy-document",//图标
     label: "弹出选择框",
     options: {
-      type: "text",
-      width: "100%", // 宽度
+      width: 100, // 宽度
       defaultValue: "", // 默认值
       placeholder: "请输入", // 没有输入时，提示文字
       clearable: false,
-      maxLength: null,
       hidden: false, // 是否隐藏，false显示，true隐藏
       disabled: false // 是否禁用，false不禁用，true禁用
     },
   },
   {
-    type: "input",//控件类型
+    type: "p",//控件类型
     icon: "el-icon-notebook-2",//图标
     label: "文字",
     options: {
-      type: "text",
-      width: "100%", // 宽度
-      defaultValue: "", // 默认值
-      placeholder: "请输入", // 没有输入时，提示文字
-      clearable: false,
-      maxLength: null,
-      hidden: false, // 是否隐藏，false显示，true隐藏
-      disabled: false // 是否禁用，false不禁用，true禁用
+      width: 100, // 宽度
     },
   },
   {
-    type: "input",//控件类型
+    type: "super",//控件类型
     icon: "el-icon-link",//图标
     label: "超链接",
     options: {
-      type: "text",
-      width: "100%", // 宽度
-      defaultValue: "", // 默认值
-      placeholder: "请输入", // 没有输入时，提示文字
-      clearable: false,
-      maxLength: null,
-      hidden: false, // 是否隐藏，false显示，true隐藏
-      disabled: false // 是否禁用，false不禁用，true禁用
+      defaultValue: "点击这跳转", // 默认值
+      url:"",//跳转连接
     },
   },
   {
@@ -372,18 +381,26 @@ export const baseList=[
     },
   },
   {
-    type: "input",//控件类型
+    type: "tMKeditor",//控件类型
     icon: "el-icon-s-grid",//图标
     label: "富文本",
+    list: [],
     options: {
-      type: "text",
-      width: "100%", // 宽度
-      defaultValue: "", // 默认值
-      placeholder: "请输入", // 没有输入时，提示文字
-      clearable: false,
-      maxLength: null,
+      height: 3,
+      placeholder: "请dada",
+      chinesization: true,
       hidden: false, // 是否隐藏，false显示，true隐藏
-      disabled: false // 是否禁用，false不禁用，true禁用
+      disabled: false,
+      showLabel: false,
+      width: 100
     },
+    model: "",
+    key: "",
+    rules: [
+      {
+        required: false,
+        message: "必填项"
+      }
+    ]
   },
 ];

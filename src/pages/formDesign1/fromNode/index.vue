@@ -1,8 +1,12 @@
 <template>
+  <div style="width: 100%">
   <el-form-item
-    :label="item.options.hidden?'':item.label"
-    :required="item.rules[0].required"
+    :label="item.options.hidden||item.type==='tMKeditor'||isLabel?'':item.label"
+    :required="item.rules?item.rules[0].required:false"
+    :label-width="item.type==='tMKeditor'||isLabel?'0px':layout.labelWidth+'%'"
+    :style="item.type==='tMKeditor'?'overflow:hidden':''"
   >
+
     <el-input
       v-if="item.type === 'input'"
       :placeholder="item.options.placeholder"
@@ -28,7 +32,7 @@
     />
     <el-input-number
       v-if="item.type === 'number'"
-      v-model="item.options.defaultValue"
+      v-model="item.options.numberDefaultValue"
       :step="item.options.step"
       :style="'width:'+item.options.width+'%'"
       :min="item.options.min"
@@ -115,8 +119,8 @@
       :disabled="item.options.disabled"
       :file-list="item.options.uploadDefaultValue"
     >
-      <el-button size="small" type="primary">{{item.options.buttonText}}</el-button>
-      <div slot="tip" class="el-upload__tip">{{item.options.warnText}}</div>
+      <el-button size="small" type="primary">{{ item.options.buttonText }}</el-button>
+      <div slot="tip" class="el-upload__tip">{{ item.options.warnText }}</div>
     </el-upload>
     <el-upload
       v-if="item.type === 'uploadImg'"
@@ -128,34 +132,98 @@
     >
       <i class="el-icon-plus"></i>
     </el-upload>
-    <el-dialog :visible.sync="item.options.dialogVisible">
+    <div
+      v-if="item.type === 'super'"
+    >
+      <a
+        :href="'https://'+item.options.url"
+        target="_blank"
+      >
+        {{item.options.defaultValue}}
+      </a>
+    </div>
+    <TipsWindow
+      v-if="item.type === 'tipsWindow'"
+    />
+    <el-dialog :visible.sync="item.options.dialogVisible"  v-if="item.type === 'uploadImg'">
       <img width="100%" :src="item.options.dialogImageUrl" alt="">
     </el-dialog>
+    <TMKeditor
+      v-if="item.type==='tMKeditor'"
+      ref="KEditor"
+      :style="`width:${item.options.width}%`"
+      :record="item"
+      :disabled="true"
+    />
+    <el-switch
+      v-if="item.type === 'switch'"
+      v-model="item.options.switchValue"
+      :active-text="item.options.activeText"
+      :inactive-text="item.options.inactiveText"
+      :disabled="item.options.disabled"
+    />
+    <div class="block"
+         v-if="item.type === 'slider'"
+    >
+      <el-slider
+        v-model="item.options.numberDefaultValue"
+        :disabled="item.options.disabled"
+        :show-input="item.options.showInput"
+        :step="item.options.step"
+      />
+    </div>
+    <div
+      v-if="item.type==='p'"
+      :style="'width:'+item.options.width+'%; margin: 0; padding: 0; line-height: 20px; '"
+      v-text="item.label"
+    />
+    <el-button
+      v-if="item.type === 'button'"
+      :type="item.options.buttonType"
+      :disabled="item.options.disabled"
+    >{{item.label}}</el-button>
     <p id="control-key">{{item.key}}</p>
   </el-form-item>
+  </div>
 </template>
 
 <script>
+  import TMKeditor from '../tMkeditor'
+  import TipsWindow from '../tipsWindown'
     export default {
         name: "formNode",
+        components:{TMKeditor, TipsWindow},
         props:{
+            typeList:{
+                type: Array,
+                default: ()=>[
+                    "button",
+                    "divider",
+                    "card",
+                    "grid",
+                    "table",
+                    "alert",
+                    "html",
+                    "p",
+                ]
+            },
+            layout:{
+                type: Object,
+                required: true
+            },
             item:{
                 type: Object,
                 required: true
             }
         },
+        computed:{
+            isLabel(){
+                //判断是否是需要label的Node
+                return this.typeList.includes(this.item.type);
+            },
+        },
         data(){
             return {
-                fileList: [
-                    {
-                        name: 'food.jpeg',
-                        url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-                    },
-                    {
-                        name: 'food2.jpeg',
-                        url: 'https://fuss10.elemecdn.com/3/63/4e7f3a15429bfda99bce42a18cdd1jpeg.jpeg?imageMogr2/thumbnail/360x360/format/webp/quality/100'
-                    }
-                ],
             };
         },
         methods:{
