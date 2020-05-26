@@ -6,6 +6,7 @@
         <ControlList
           @start=""
           :baseArray="baseArray"
+          :layoutList="layoutList"
           @generate="generate"
           @clickPushItem="clickPushItem"
         />
@@ -65,7 +66,7 @@
 </template>
 
 <script>
-    import {baseList} from './baseConfig'
+    import {baseList, layoutList} from './baseConfig'
     import ContentFormTemplate from './contentFormTemplate'
     import ControlList from './controlList'
     import LayoutForm from './leftAside'
@@ -86,6 +87,15 @@
             })
         },
         props: {
+            layoutBaseList:{
+                type: Array,
+                default: ()=>[
+                    "divider",
+                    "card",
+                    "grid",
+                    "table"
+                ]
+            },
             baseList: {
                 type: Array,
                 default: () => [
@@ -129,7 +139,7 @@
                 data: {
                     list: [],
                     config: {
-                        labelPosition: "left",
+                        labelPosition: "top",
                         labelWidth: 15,
                         customWidth: ""
                     }
@@ -163,8 +173,12 @@
                 //判断当前是否有选中selectIndex
                 return typeof(this.selectIndex) === 'number'
             },
+            layoutList(){
+                //计算返回布局控件
+                return layoutList.filter((item)=>this.layoutBaseList.includes(item.type))
+            },
             baseArray(){
-                //计算返回传入子组件的值
+                //计算返回基础控件传入子组件的值
                 return baseList.filter((item)=>this.baseList.includes(item.type))
             }
         },

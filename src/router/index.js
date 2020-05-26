@@ -10,6 +10,7 @@ const SuperForm = ()=>import("../pages/baseForm/superForm");
 const Author = () =>import("../pages/authorSet");
 const FormDesign = () =>import("../pages/formDesign");
 const FormDesign1 = () =>import("../pages/formDesign1");
+const Boom =()=>import("../pages/boom");
 const router = new Router({
   mode:"history",
   routes: [
@@ -58,6 +59,10 @@ const router = new Router({
           path: "formDesign",
           name: "formDesign",
           component: FormDesign
+        },{
+          path: "boom",
+          name: "Boom",
+          component: Boom
         },
         // {
         //   path: "555555",

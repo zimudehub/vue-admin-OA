@@ -5,6 +5,7 @@ const boomConfig=[
     needNumber:8,//订单需求
     haveNumber:3,//库存3
     madeNumber:1,//使用多少库存
+    putNumber:5,
     children:[
       {
         id:"1-1",
@@ -13,6 +14,7 @@ const boomConfig=[
         needNumber: 5,
         haveNumber: 4,
         madeNumber: 4,
+        putNumber:5,
         children:[
           {
             id: "1-1-1",
@@ -21,6 +23,7 @@ const boomConfig=[
             needNumber: 4,
             haveNumber: 3,
             madeNumber: 1,
+            putNumber:5,
           },
           {
             id: "1-1-2",
@@ -29,6 +32,7 @@ const boomConfig=[
             needNumber: 4,
             haveNumber: 3,
             madeNumber: 1,
+            putNumber:5,
           }
         ]
       },
@@ -38,6 +42,7 @@ const boomConfig=[
         needNumber: 5,
         haveNumber: 4,
         madeNumber: 4,
+        putNumber:5,
       }
     ]
   }

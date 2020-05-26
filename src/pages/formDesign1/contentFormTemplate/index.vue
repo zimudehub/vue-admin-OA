@@ -7,14 +7,14 @@
       class= "wrapper"
       v-model= "data.list"
       v-bind= "{
-        group: { name: 'form-draggable', pull: 'clone', put: true },
+        group: 'form-draggable',
         animation: 180,
         handle:'.dar-box',
         ghostClass: 'moving',
         sort: true,
       }"
       @add="deepClone"
-      @end="start"
+      @start="start"
     >
       <transition-group tag="div" name="list" class="list-main">
           <TFormTemplate
@@ -60,9 +60,6 @@
             }
         },
         components:{draggable, TFormTemplate},
-        created(){
-          console.log(this.$refs)
-        },
         computed:{
 
         },
@@ -76,9 +73,10 @@
         },
         methods: {
             start(e){
-                this.$emit("startChoose", e.newIndex)
+                this.$emit("startChoose", e.oldIndex)
             },
             handleSelectItem(item){
+                console.log(item)
                 this.$emit("choose", item)
             },
 

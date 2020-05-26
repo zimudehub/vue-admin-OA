@@ -67,6 +67,11 @@ export default{
       ]
     },
     {
+      name: "boom",
+      path: "boom",
+      icon: "el-icon-s-order"
+    },
+    {
       name: "操作日志",
       path: "55",
       icon: "el-icon-s-order"

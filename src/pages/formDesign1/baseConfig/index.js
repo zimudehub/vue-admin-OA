@@ -335,19 +335,19 @@ export const baseList=[
       }
     ]
   },
-  {
-    type: "tipsWindow",//控件类型
-    icon: "el-icon-copy-document",//图标
-    label: "弹出选择框",
-    options: {
-      width: 100, // 宽度
-      defaultValue: "", // 默认值
-      placeholder: "请输入", // 没有输入时，提示文字
-      clearable: false,
-      hidden: false, // 是否隐藏，false显示，true隐藏
-      disabled: false // 是否禁用，false不禁用，true禁用
-    },
-  },
+  // {
+  //   type: "tipsWindow",//控件类型
+  //   icon: "el-icon-copy-document",//图标
+  //   label: "弹出选择框",
+  //   options: {
+  //     width: 100, // 宽度
+  //     defaultValue: "", // 默认值
+  //     placeholder: "请输入", // 没有输入时，提示文字
+  //     clearable: false,
+  //     hidden: false, // 是否隐藏，false显示，true隐藏
+  //     disabled: false // 是否禁用，false不禁用，true禁用
+  //   },
+  // },
   {
     type: "p",//控件类型
     icon: "el-icon-notebook-2",//图标
@@ -403,4 +403,89 @@ export const baseList=[
       }
     ]
   },
+];
+//布局控件
+export const layoutList = [
+  {
+    type: "divider",
+    label: "分割线",
+    icon: "el-icon-minus",
+    options: {
+      orientation: "left"
+    },
+    key: "",
+    model: ""
+  },
+  {
+    type: "card",
+    label: "卡片布局",
+    icon: "el-icon-postcard",
+    list: [],
+    key: "",
+    model: ""
+  },
+  {
+    type: "grid",
+    label: "栅格布局",
+    icon: "el-icon-s-grid",
+    columns: [
+      {
+        span: 12,
+        list: []
+      },
+      {
+        span: 12,
+        list: []
+      },
+    ],
+    options: {
+      gutter: 0
+    },
+    key: "",
+    model: ""
+  },
+  {
+    type: "table",
+    label: "表格布局",
+    icon: "el-icon-menu",
+    trs: [
+      {
+        tds: [
+          {
+            colspan: 1,
+            rowspan: 1,
+            list: []
+          },
+          {
+            colspan: 1,
+            rowspan: 1,
+            list: []
+          }
+        ]
+      },
+      {
+        tds: [
+          {
+            colspan: 1,
+            rowspan: 1,
+            list: []
+          },
+          {
+            colspan: 1,
+            rowspan: 1,
+            list: []
+          }
+        ]
+      }
+    ],
+    options: {
+      width: "100%",
+      bordered: true,
+      bright: false,
+      small: true,
+      customStyle: ""
+    },
+    key: "",
+    model: ""
+  }
 ];

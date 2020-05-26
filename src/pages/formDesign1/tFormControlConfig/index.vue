@@ -6,6 +6,7 @@
       label-position="top"
       size="mini"
     >
+      <p style="text-align: center; margin: 6px 0; font-size: 12px">{{config.key}}</p>
       <el-button
           type="primary"
           icon="el-icon-s-unfold"
@@ -76,7 +77,8 @@
       <UploadFileOrImg
           v-if="config.type==='uploadFile'||config.type==='uploadImg'"
           :options="config.options"
-        />
+      />
+
       <el-divider v-if="config.options.hasOwnProperty('options')"/>
       <el-form-item label="下拉框数据" v-if="config.options.hasOwnProperty('options')" >
           <el-radio-group v-model="radio"  >
