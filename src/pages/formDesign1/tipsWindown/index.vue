@@ -13,6 +13,7 @@
 </template>
 
 <script>
+    //弹出选择
     export default {
         name: "index",
         props:{

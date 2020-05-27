@@ -1,5 +1,5 @@
 <template>
-  <el-card class="box-card">
+  <el-card class="box-card" style="height: 820px">
     <div id="T-form-wrap" ref="allWrap">
 <!--      控件按钮栏~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
       <aside class="button-wrap" >
@@ -41,6 +41,7 @@
             @deleteItem="deleteItem"
             @choose="choose"
             @startChoose="startChoose"
+            @selectChange="selectChange"
           />
         </div>
         <transition name="form">
@@ -169,10 +170,6 @@
             }
         },
         computed:{
-            isNumber(){
-                //判断当前是否有选中selectIndex
-                return typeof(this.selectIndex) === 'number'
-            },
             layoutList(){
                 //计算返回布局控件
                 return layoutList.filter((item)=>this.layoutBaseList.includes(item.type))
@@ -183,6 +180,9 @@
             }
         },
         methods: {
+            selectChange(item){
+                this.selectItem=item
+            },
             startChoose(i){
                 this.selectItem = this.data.list[i]
             },
@@ -193,26 +193,32 @@
             },
             clickPushItem(list,i){
                 let item = list[i];
-                delete item.icon;
+                item = JSON.parse(JSON.stringify(item));
                 if(this.noModel.includes(item.type)){
                     delete item.model
                 }
+                delete item.icon;
                 const key = item.type +"_"+new Date().getTime();
-                this.$set(list,i,{
+                //给item做一个深克隆
+                item = {
                     ...item,
                     key,
-                    model:key
-                });
-                //给item做一个深克隆
-                item = JSON.parse(JSON.stringify(list[i]));
-
+                    model: key
+                };
+                if (!this.selectItem.key){
+                    this.data.list.push(item);
+                    this.selectItem = item;
+                    return
+                }
                 const putItem = array =>{
-                    if (array.length ===0){
-                        array.push(item);
-                        this.selectItem = item;
-                        return
-                    }
+                    //如果this.selectItem有值,找到selectItem所在位置
                     array.forEach((child,i)=>{
+                        if(child.type === "grid"){
+                            //如果是格栅布局
+                            child.columns.forEach((item,i)=>{
+                                putItem(item.list)
+                            })
+                        }
                         if(child.key===this.selectItem.key){
                            array.splice(i+1,0,item)
                         }else if(this.selectItem.key===''){
@@ -224,29 +230,37 @@
                 this.selectItem = item
             },
             deleteItem(){
-                this.data.list.forEach((item,i)=>{
-                    if (item.key === this.selectItem.key){
-                        this.data.list.splice(i,1);
-                        if (this.data.list.length===0){
-                            this.selectItem = {key: ''};
-
-                        }else if(this.data.list.length === i) {
-                            this.selectItem = this.data.list[i-1]
-                        }else {
-                            this.selectItem = this.data.list[i]
+                const delItem = array =>{
+                    array.forEach((child,i)=>{
+                        if (child.type === "grid"){
+                            child.columns.forEach((item,i)=>{
+                                delItem(item.list)
+                            })
                         }
-                    }
-                })
+                        if (child.key === this.selectItem.key){
+                            array.splice(i,1);
+                            if (array.length===0){
+                                this.selectItem = {key: ''};
+
+                            }else if(array.length === i) {
+                                this.selectItem = array[i-1]
+                            }else {
+                                this.selectItem = array[i]
+                            }
+                        }
+                    })
+                };
+                delItem(this.data.list)
             },
             selectItemChange(item, i){
-                this.$set(this.data.list,i, item
-                );
+                this.$set(this.data.list,i, item);
                 this.selectItem = item
             },
             generate(list,i){
-                const item = list[i];
+                let item = list[i];
                 //生成key
                 const key = item.type +"_"+new Date().getTime();
+                item = JSON.parse(JSON.stringify(item));
                 //把总线的list里的key赋值,并且让数据联动字段等于key
                 this.$set(list,i,{
                     ...item,
@@ -257,9 +271,6 @@
                 if(this.noModel.includes(item.type)){
                   delete list[i].model
                 }
-            },
-            handleControlList(list){
-            //    拿到左侧拖拽到操作框的控件类型
             },
             shrink(){
                 this.isShrink = false

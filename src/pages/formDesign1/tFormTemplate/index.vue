@@ -11,30 +11,34 @@
         <div class="grid-box">
           <el-row>
             <el-col
-              v-for="(items, i) in item.columns"
+              v-for="(column, i) in item.columns"
               class="grid-item"
-              :span="12"
+              :span="column.span"
               :key="i"
             >
               <draggable
                 tag="div"
                 class="grid-box-dra"
-                v-model= "items.list"
+                v-model= "column.list"
                 v-bind= "{
                   group: 'form-draggable',
                   animation: 180,
                   handle:'.dar-box',
                   ghostClass: 'moving',
                 }"
+                @add="addItem($event,column.list)"
               >
                 <transition-group tag="div" name="list" class="grid-item">
                   <TFormTemplate
-                    v-for="(r, i) in items.list"
+                    v-for="(r, i) in column.list"
                     :key="r.key"
                     :item="r"
                     :i="i"
                     :layout="layout"
                     :selectItem="selectItem"
+                    @onClick="onClick"
+                    @deleteItem="deleteItem"
+                    @selectChange="selectChange"
                   />
                 </transition-group>
               </draggable>
@@ -43,11 +47,12 @@
         </div>
       </template>
 <!--      格栅布局结束-->
-      <FormNode
-        v-else
-        :item="item"
-        :layout="layout"
-      />
+      <template v-else>
+        <FormNode
+          :item="item"
+          :layout="layout"
+        />
+      </template>
       <el-button
         size="mini"
         type="primary"
@@ -72,7 +77,6 @@
             },
             item:{
                 type: Object,
-                default:()=>{},
                 required: true
             },
             i:{
@@ -85,7 +89,18 @@
         },
         methods:{
             deleteItem(){
-              this.$emit('deleteItem')
+                this.$emit('deleteItem')
+            },
+            selectChange(item){
+                this.$emit("selectChange", item)
+            },
+            addItem(e,list){
+                let item = JSON.parse(JSON.stringify(list[e.newIndex]));
+                this.$set(list,e.newIndex, item);
+                this.$emit("selectChange", item)
+            },
+            onClick(r){
+                this.$emit("onClick",r)
             }
         }
     }

@@ -59,16 +59,20 @@
         methods:{
             handleValueChange(value,item){
                 item.madeNumber = value.target.value;
-                if (item.children){
-                    item.children.forEach((items,i)=>{
-                        items.needNumber = (item.needNumber-item.madeNumber)*items.coefficient
-                    })
-                }
-                if(item.madeNumber>item.needNumber){
-                    console.log(1)
-                    item.madeNumber = item.needNumber
-                    console.log(item.madeNumber)
-                }
+                const valChange = function(item){
+                    if (item.children){
+                        item.children.forEach((items,i)=>{
+                            if(item.madeNumber>item.needNumber){
+                                item.madeNumber = item.needNumber
+                            }
+                            items.needNumber = (item.needNumber-item.madeNumber)*items.coefficient;
+                            valChange(items)
+
+
+                        })
+                    }
+                };
+                valChange(item)
             }
         },
         data(){

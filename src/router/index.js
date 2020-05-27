@@ -12,7 +12,6 @@ const FormDesign = () =>import("../pages/formDesign");
 const FormDesign1 = () =>import("../pages/formDesign1");
 const Boom =()=>import("../pages/boom");
 const router = new Router({
-  mode:"history",
   routes: [
     {
       path: '/login',

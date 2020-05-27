@@ -13,7 +13,7 @@
         ghostClass: 'moving',
         sort: true,
       }"
-      @add="deepClone"
+      @add="addItem"
       @start="start"
     >
       <transition-group tag="div" name="list" class="list-main">
@@ -26,6 +26,7 @@
             @deleteItem="deleteItem"
             :selectItem.sync="selectItem"
             @onClick="handleSelectItem"
+            @selectChange="selectChange"
           />
       </transition-group>
     </draggable>
@@ -76,11 +77,12 @@
                 this.$emit("startChoose", e.oldIndex)
             },
             handleSelectItem(item){
-                console.log(item)
                 this.$emit("choose", item)
             },
-
-            deepClone(e){
+            selectChange(item){
+                this.$emit("selectChange", item)
+            },
+            addItem(e){
                 //当从左侧拖进来时,将拖进来的数据,克隆一份传给selectItem,保证操作区域的data.list值唯一
                 const item = JSON.parse(JSON.stringify(this.data.list[e.newIndex]));
                 delete item.icon;

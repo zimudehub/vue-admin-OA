@@ -12,8 +12,8 @@
             animation: 180,
             ghostClass: 'leftMoving'
           }"
-          @start="handleStart($event, baseArray)"
-        >
+          @start="deepClone($event, baseArray)"
+      >
           <li
             v-for="(val, index) in baseArray"
             :key="index"
@@ -26,26 +26,26 @@
         </draggable>
       <el-divider content-position="left">基础控件</el-divider>
       <draggable
-        tag="ul"
-        :value="layoutList"
-        class="button-wrap-drg"
-        v-bind="{
+          tag="ul"
+          :value="layoutList"
+          class="button-wrap-drg"
+          v-bind="{
             group: { name: 'form-draggable', pull: 'clone', put: false },
             sort: false,
             animation: 180,
             ghostClass: 'leftMoving'
           }"
-        @start="handleStart($event, layoutList)"
+          @start="deepClone($event, layoutList)"
       >
-        <li
-          v-for="(val, index) in layoutList"
-          :key="index"
-          @dragstart="$emit('generate', layoutList, index)"
-          @click="$emit('clickPushItem', layoutList, index)"
-        >
-          <i :class="val.icon"></i>
-          {{ val.label }}
-        </li>
+          <li
+            v-for="(val, index) in layoutList"
+            :key="index"
+            @dragstart="$emit('generate', layoutList, index)"
+            @click="$emit('clickPushItem', layoutList, index)"
+          >
+            <i :class="val.icon"></i>
+            {{ val.label }}
+          </li>
       </draggable>
       <el-divider content-position="left">布局控件</el-divider>
     </div>
@@ -74,9 +74,9 @@
             }
         },
         methods:{
-            handleStart(e, baseArray){
-
-            }
+            deepClone(e, list){
+              // console.log(e)
+            },
         }
     }
 </script>
