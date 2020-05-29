@@ -78,7 +78,33 @@
           v-if="config.type==='uploadFile'||config.type==='uploadImg'"
           :options="config.options"
       />
-
+      <el-divider v-if="config.options.hasOwnProperty('gutter')" />
+      <el-form-item v-if="config.options.hasOwnProperty('gutter')" label="格栅间距">
+        <el-input-number
+          v-model="config.options.gutter"
+          :min="0"
+          controls-position="right"
+          size="mini"
+        />
+      </el-form-item>
+      <div style="margin-top: 8px" v-if="config.hasOwnProperty('columns')">
+        <div style="font-size: 14px">格栅配置</div>
+        <el-row v-for="(item,index) in config.columns" :key="index" :gutter="5" style="margin-top: 6px">
+          <el-col :span="12" >
+            <el-input-number
+              v-model="item.span"
+              :max="24"
+              :min="0"
+              controls-position="right"
+              size="mini"
+            />
+          </el-col>
+          <el-col :span="6">
+            <el-button style="padding: 7px" type="danger" icon="el-icon-delete" circle @click="deleteItem(config.columns,index)"></el-button>
+          </el-col>
+        </el-row>
+        <a href="#" @click="addItem(config.columns)" style="text-decoration:none; font-size: 14px">增加数据</a>
+      </div>
       <el-divider v-if="config.options.hasOwnProperty('options')"/>
       <el-form-item label="下拉框数据" v-if="config.options.hasOwnProperty('options')" >
           <el-radio-group v-model="radio"  >
@@ -224,16 +250,21 @@
             }
         },
         methods:{
+            addItem(columns){
+                columns.push({
+                    span: 12,
+                    list: []
+                })
+            },
             addModel(){
                 // this.$emit('addModel')
             },
             handleShrink(){
                 this.$emit('shrink')
+            },
+            deleteItem(columns,i){
+                columns.splice(i,1)
             }
         }
     }
 </script>
-
-<style scoped>
-
-</style>

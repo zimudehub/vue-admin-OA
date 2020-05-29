@@ -13,26 +13,9 @@
       </aside>
 <!--      中间控件展示栏~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
       <section class="T-form-main" ref="contentWrap">
-        <div class="content-top-button" >
-          <el-tooltip class="item" effect="dark" content="保存" placement="top-start">
-            <el-button icon="el-icon-document-checked" circle size="mini"></el-button>
-          </el-tooltip>
-          <el-tooltip class="item" effect="dark" content="预览" placement="top-start">
-            <el-button icon="el-icon-view" circle size="mini" @click="view"></el-button>
-          </el-tooltip>
-          <el-tooltip class="item" effect="dark" content="导入" placement="top-start">
-            <el-button icon="el-icon-upload2" circle size="mini"></el-button>
-          </el-tooltip>
-          <el-tooltip class="item" effect="dark" content="生成Json" placement="top-start">
-            <el-button icon="el-icon-tickets" circle size="mini"></el-button>
-          </el-tooltip>
-          <el-tooltip class="item" effect="dark" content="生成Html" placement="top-start">
-            <el-button icon="el-icon-document" circle size="mini"></el-button>
-          </el-tooltip>
-          <el-tooltip class="item" effect="dark" content="清空" placement="top-start">
-            <el-button icon="el-icon-delete" circle size="mini" @click="deleteAll"></el-button>
-          </el-tooltip>
-        </div>
+        <TopButton
+          :data="data"
+        />
         <div class="control-center-wrap">
           <ContentFormTemplate
             :data="data"
@@ -42,6 +25,7 @@
             @choose="choose"
             @startChoose="startChoose"
             @selectChange="selectChange"
+            :selectType="selectType"
           />
         </div>
         <transition name="form">
@@ -72,9 +56,10 @@
     import ControlList from './controlList'
     import LayoutForm from './leftAside'
     import TFormControlConfig from './tFormControlConfig'
+    import TopButton from './contentFormTemplate/topButton'
     export default {
         name: "index",
-        components: {ControlList, ContentFormTemplate, LayoutForm, TFormControlConfig},
+        components: {ControlList, ContentFormTemplate, LayoutForm, TFormControlConfig, TopButton},
         mounted(){
             //这里的代码为富文本编辑器服务,因为布局关系会导致富文本编辑器被拖入的时候造成页面被撑开,这里做监听
             this.$refs.contentWrap.style.width = this.$refs.allWrap.scrollWidth-640+"px";
@@ -88,6 +73,20 @@
             })
         },
         props: {
+            childTableBans:{
+                type: Array,
+                default: ()=>[
+                    "button",
+                    "divider",
+                    "card",
+                    "grid",
+                    "table",
+                    "p",
+                    "super",
+                    "childTable",
+                    "tMKeditor"
+                ]
+            },
             layoutBaseList:{
                 type: Array,
                 default: ()=>[
@@ -116,7 +115,8 @@
                     "slider",
                     "p",
                     "super",
-                    "tipsWindow"
+                    "tipsWindow",
+                    "childTable"
                 ]
             }
         },
@@ -137,6 +137,7 @@
                 selectItem:{
                     key:""
                 },//当前激活项
+                selectType:"",
                 data: {
                     list: [],
                     config: {
@@ -152,7 +153,10 @@
                 //监听data.list如果没值将isShrink置为false,为操作栏中的清除按钮服务
                 handler(newValue){
                     if (newValue.list.length===0){
-                        this.isShrink = false
+                        this.isShrink = false;
+                        this.selectItem={
+                            key: ""
+                        }
                     }
                 },
                 deep:true,
@@ -194,9 +198,6 @@
             clickPushItem(list,i){
                 let item = list[i];
                 item = JSON.parse(JSON.stringify(item));
-                if(this.noModel.includes(item.type)){
-                    delete item.model
-                }
                 delete item.icon;
                 const key = item.type +"_"+new Date().getTime();
                 //给item做一个深克隆
@@ -205,6 +206,9 @@
                     key,
                     model: key
                 };
+                if(this.noModel.includes(item.type)){
+                    delete item.model
+                }
                 if (!this.selectItem.key){
                     this.data.list.push(item);
                     this.selectItem = item;
@@ -219,8 +223,26 @@
                                 putItem(item.list)
                             })
                         }
+                        if(child.type === "card"){
+                                putItem(child.list)
+                        }
+                        if (child.type === "childTable"){
+                            child.list.forEach((items)=>{
+                                if (this.childTableBans.includes(item.type)){
+                                    //屏蔽掉不可放入子表的控件
+                                    item=this.selectItem;
+                                }else {
+                                    if(items.key===this.selectItem.key){
+                                        child.list.splice(i+1,0,item);
+                                    }else if(this.selectItem.key===''){
+                                        child.list.push(item)
+                                    }
+                                }
+                            });
+
+                        }
                         if(child.key===this.selectItem.key){
-                           array.splice(i+1,0,item)
+                            array.splice(i+1,0,item);
                         }else if(this.selectItem.key===''){
                             array.push(item)
                         }
@@ -236,6 +258,12 @@
                             child.columns.forEach((item,i)=>{
                                 delItem(item.list)
                             })
+                        }
+                        if(child.type === "card"){
+                                delItem(child.list)
+                        }
+                        if(child.type === "childTable"){
+                            delItem(child.list)
                         }
                         if (child.key === this.selectItem.key){
                             array.splice(i,1);
@@ -271,6 +299,8 @@
                 if(this.noModel.includes(item.type)){
                   delete list[i].model
                 }
+                delete list[i].icon;
+                this.selectType = item.type
             },
             shrink(){
                 this.isShrink = false
@@ -281,17 +311,6 @@
                     label: ""
                 })
             },
-            deleteAll(){
-                this.data.list=[];
-                this.selectIndex=""
-            },
-            view(){
-                console.log(this.data.list)
-            },
-            deepClone(e){
-
-            }
-
         }
     }
 </script>

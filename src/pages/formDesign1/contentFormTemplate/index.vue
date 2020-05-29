@@ -23,6 +23,8 @@
             :key="item.key"
             :item="item"
             :i = "i"
+            :selectType="selectType"
+            @handleStart="handleStart"
             @deleteItem="deleteItem"
             :selectItem.sync="selectItem"
             @onClick="handleSelectItem"
@@ -39,6 +41,9 @@
     export default {
         name: "contentFormTemplate",
         props:{
+            selectType:{
+                required: true
+            },
             data:{
                 type: Object,
                 required: true
@@ -75,6 +80,9 @@
         methods: {
             start(e){
                 this.$emit("startChoose", e.oldIndex)
+            },
+            handleStart(e,list){
+                this.selectChange(list[e.oldIndex])
             },
             handleSelectItem(item){
                 this.$emit("choose", item)

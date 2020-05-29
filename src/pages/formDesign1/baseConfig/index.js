@@ -161,18 +161,11 @@ export const baseList=[
         {
           value: "1",
           label: "选项1",
-          key:11
         },
         {
           value: "2",
           label: "选项2",
-          key:22
         },
-        {
-          value: "3",
-          label: "选项3",
-          key:33
-        }
       ]
     },
     model: "",
@@ -195,7 +188,7 @@ export const baseList=[
       disabled: false, // 是否禁用
       placeholder: "请选择日期点",
       format:"yyyy 年 MM 月 dd 日",//展示格式
-      isChooseTimes: "2",//是否是选择一个时间段
+      isChooseTimes: "1",//是否是选择一个时间段1是时间点
       valueFormat:"timestamp",//解析格式
       rangeSeparator:"至",//时间段选择中间文字
       startPlaceholder:"开始日期",//时间段选择前文字
@@ -215,7 +208,7 @@ export const baseList=[
     icon: "el-icon-date",//图标
     label: "时间选择器",
     options: {
-      isChooseTimes: "2",//是否是选择一个时间段
+      isChooseTimes: "1",//是否是选择一个时间段
       width: 100, // 宽度
       defaultValue: "", // 默认值，字符串 12:00:00
       clearable: false, // 是否显示清除按钮
@@ -299,7 +292,7 @@ export const baseList=[
     icon: "el-icon-open",//图标
     label: "开关",
     options: {
-      switchValue: false, // 默认值 Boolean 类型
+      switchValue: "1", // 默认值 Boolean 类型
       disabled: false, // 是否禁用
       activeText:"开",
       inactiveText:"关"
@@ -349,6 +342,17 @@ export const baseList=[
   //   },
   // },
   {
+    type: "childTable",
+    label: "子表",
+    icon: "el-icon-menu",
+    list: [],
+    options: {
+
+    },
+    model: "",
+    key: ""
+  },
+  {
     type: "p",//控件类型
     icon: "el-icon-notebook-2",//图标
     label: "文字",
@@ -363,21 +367,6 @@ export const baseList=[
     options: {
       defaultValue: "点击这跳转", // 默认值
       url:"",//跳转连接
-    },
-  },
-  {
-    type: "input",//控件类型
-    icon: "el-icon-s-grid",//图标
-    label: "子表",
-    options: {
-      type: "text",
-      width: "100%", // 宽度
-      defaultValue: "", // 默认值
-      placeholder: "请输入", // 没有输入时，提示文字
-      clearable: false,
-      maxLength: null,
-      hidden: false, // 是否隐藏，false显示，true隐藏
-      disabled: false // 是否禁用，false不禁用，true禁用
     },
   },
   {
@@ -422,7 +411,9 @@ export const layoutList = [
     icon: "el-icon-postcard",
     list: [],
     key: "",
-    model: ""
+    model: "",
+    options: {
+    },
   },
   {
     type: "grid",

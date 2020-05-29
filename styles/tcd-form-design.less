@@ -1,3 +1,12 @@
+.CodeMirror{
+  height: 450px !important;
+}
+.el-upload__tip{
+  white-space: normal;
+}
+.el-radio-group{
+  white-space: normal;
+}
 li{
   list-style: none;
 }
@@ -206,15 +215,15 @@ li{
                   position: absolute;
                   top: 1px;
                   height: 5px;
-                  right: -100%;
-                  width: 100%;
-                  transition: right 0.5s;
+                  right: 0;
+                  width: 1%;
+                  transition: width 0.5s;
                 }
 
                 &.active{
                   background: rgba(183,221,255,0.5);
                   &::before{
-                    right: 0;
+                    width: 100%;
                     background: #409eff;
                   }
                 }
@@ -239,13 +248,67 @@ li{
                 }
                 .grid-box{
                   padding: 5px;
-                  background: #e3dafa;
+                  background: #fadce6;
                   .grid-box-dra{
                     min-height: 60px;
                   }
                   .grid-item{
                     min-height: 60px;
-                    border: 1px #ccc dashed;;
+                    border: 1px #ccc dashed;
+                  }
+                }
+
+                .childTable-layout{
+                  //子表布局
+                  background:#fadce6;
+                  .el-card__body{
+                    padding: 6px;
+                    .childTable-card-dra {
+                      min-height: 60px;
+                      width     : 100%;
+                      border    : 1px #ccc dashed;
+                      background: #fff;
+
+                      .childTable-main {
+                        min-height : 60px;
+                        position   : relative;
+                        border     : 1px #ccc dashed;
+                        overflow-x : auto;
+                        overflow-y : auto;
+                        white-space: nowrap;
+
+                        .gridMoving {
+                          // 拖放移动中
+                          width     : 175px;
+                          min-height: 94px;
+                          display   : inline-block;
+                          &.gridMoving::before{
+                            content: '';
+                            position: absolute;
+                            top: 0;
+                            min-width: 185px;
+                            height: 5px;
+                            background: #409eff;
+                            display: block;
+                          }
+                        }
+                        >div {
+                          min-width     : 185px;
+                          display       : inline-block;
+                          vertical-align: top;
+                        }
+                      }
+                    }
+                  }
+                }
+                .card-layout{
+                  background:#fadce6;
+
+                  .grid-card-dra{
+                    min-height: 60px;
+                  }
+                  .card-item{
+                    min-height: 60px;
                   }
                 }
                 .el-form-item{
