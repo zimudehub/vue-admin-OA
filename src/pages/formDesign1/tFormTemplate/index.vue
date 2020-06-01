@@ -49,6 +49,7 @@
                     @deleteItem="deleteItem"
                     @selectChange="selectChange"
                     @handleStart="start"
+                    :selectType="selectType"
                   />
                 </transition-group>
               </draggable>
@@ -90,6 +91,7 @@
                     @deleteItem="deleteItem"
                     @selectChange="selectChange"
                     @handleStart="start"
+                    :selectType="selectType"
                   />
                 </transition-group>
               </draggable>
@@ -163,6 +165,7 @@
         components:{FormNode, draggable},
         props:{
             selectType:{
+                required:true,
                 default:""
             },
             childTableBans:{
@@ -173,7 +176,6 @@
                     "card",
                     "grid",
                     "table",
-                    "p",
                     "super",
                     "childTable",
                     "tMKeditor"

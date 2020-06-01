@@ -55,7 +55,7 @@
           />
         </el-form-item>
       <el-divider v-if="config.options.hasOwnProperty('width')" />
-      <el-form-item v-if="config.options.hasOwnProperty('width')" label="宽度">
+      <el-form-item v-if="config.options.hasOwnProperty('width')" label="宽度(子表中控件宽度不生效)">
           <div class="block">
             <el-slider
               v-model="config.options.width"
@@ -199,8 +199,34 @@
         <el-checkbox v-model="config.options.multiple" v-if="config.options.hasOwnProperty('multiple')">可多选文件</el-checkbox>
       </el-form-item>
       <el-divider v-if="config.hasOwnProperty('rules')"></el-divider>
-      <el-form-item label="校验规则" v-if="config.hasOwnProperty('rules')">
-        <el-checkbox v-if="config.hasOwnProperty('rules')" v-model="config.rules[0].required">必填项</el-checkbox>
+      <el-form-item label="校验规则(子表中校验规则不生效)" v-if="config.hasOwnProperty('rules')">
+        <div v-for="(item,index) in config.rules" :key="index" style="margin-top: 6px">
+          <el-row v-if="index === 0">
+            <el-col  :span="24" >
+              <el-checkbox v-if="config.hasOwnProperty('rules')" v-model="config.rules[0].required">必填项</el-checkbox>
+            </el-col>
+          </el-row>
+          <el-row v-else>
+            <el-col  :span="18" >
+              <el-input
+                v-model="item.pattern"
+                placeholder="请输入正则"
+              />
+            </el-col>
+            <el-col :span="18">
+              <el-input
+                v-model="item.message"
+                placeholder="请输入提示内容"
+              />
+            </el-col>
+            <el-col :span="6">
+              <el-button type="danger" icon="el-icon-delete" circle @click="deleteRule(config.rules,index)"></el-button>
+            </el-col>
+          </el-row>
+        </div>
+        <div>
+          <a href="#" @click="handleAddRules(config.rules)">增加验证规则</a>
+        </div>
       </el-form-item>
     </el-form>
 </template>
@@ -218,31 +244,12 @@
                 required: true
             },
         },
-        // watch:{
-        //     config:{
-        //         handler(n){
-        //             console.log(n)
-        //         },
-        //         deep:true
-        //     }
-        // },
+
         data(){
             return{
                 radio:'1',
             }
         },
-        // watch:{
-        //     config:{
-        //         handler(){
-        //             if(this.config.options.options.length<this.config.options.chooseMax){
-        //                 this.config.options.chooseMax = this.config.options.options.length
-        //                 console.log(this.config.options.chooseMax)
-        //             }
-        //         },
-        //         deep:true,
-        //         immediate:true
-        //     },
-        // },
         computed:{
             showCheckbox(){
                 const options = this.config.options;
@@ -261,6 +268,15 @@
             },
             handleShrink(){
                 this.$emit('shrink')
+            },
+            handleAddRules(array){
+                array.push({
+                    pattern: "",
+                    message: ""
+                })
+            },
+            deleteRule(array,i){
+                array.splice(i,1)
             },
             deleteItem(columns,i){
                 columns.splice(i,1)

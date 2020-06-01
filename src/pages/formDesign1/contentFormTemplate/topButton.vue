@@ -46,7 +46,8 @@
         data(){
             return{
                 jsonViewVisible: false,
-                formViewVisible: false
+                formViewVisible: false,
+                formJsonInnerVisible: false
             }
         },
         watch:{

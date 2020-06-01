@@ -29,6 +29,9 @@
               let options =[
                   ...this.value
               ];
+              if (options.length<=1){
+                  return
+              }
               options.splice(index,1);
               this.$emit("input", options)
             },

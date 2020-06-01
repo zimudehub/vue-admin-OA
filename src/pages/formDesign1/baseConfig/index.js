@@ -77,7 +77,7 @@ export const baseList=[
     options: {
       width: 100, // 宽度
       minWidth:20,
-      defaultValue: undefined, // 下拉选框请使用undefined为默认值
+      defaultValue: null, // 下拉选框请使用null为默认值
       multiple: false, // 是否允许多选
       disabled: false, // 是否禁用
       clearable: false, // 是否显示清除按钮
@@ -154,7 +154,7 @@ export const baseList=[
     label: "单选框",
     options: {
       disabled: false, //是否禁用
-      defaultValue: "", // 默认值
+      defaultValue: null, // 默认值
       dynamicKey: "",
       dynamic: false,
       options: [
